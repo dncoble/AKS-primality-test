@@ -14,6 +14,13 @@ func ModN(N uint, i int) int {
 	return m
 }
 
+// OrderMod returns the order of a modulo r
+// timing is ____
+func OrderMod(a int, r int) int {
+
+	return 0
+}
+
 // FastPower (without modulo by N)
 func FastPower(g int, A int) int {
 	var b int
@@ -29,8 +36,15 @@ func FastPower(g int, A int) int {
 	return b
 }
 
+// EulerTotient function finds the number of numbers less than x that are relatively prime to x
+// timing is _____
+func EulerTotient(x int) int {
+
+	return 0
+}
+
 // PerfectPower determines whether n can be represented as a perfect power a^b
-// by searching for timing is O(log^3(n))
+// timing is O(log^3(n))
 func PerfectPower(n int) bool {
 	var bMax = int(math.Log2(float64(n))) + 1
 	for b := 2; b <= bMax; b++ {
