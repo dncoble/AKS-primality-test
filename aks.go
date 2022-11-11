@@ -1,7 +1,9 @@
-package aks
+package main
 
 import (
+	"fmt"
 	"math"
+	"strconv"
 )
 
 func ModN(N uint, i int) int {
@@ -13,7 +15,7 @@ func ModN(N uint, i int) int {
 }
 
 // FastPower (without modulo by N)
-func FastPower(g int, A uint) int {
+func FastPower(g int, A int) int {
 	var b int
 	a := g
 	b = 1
@@ -32,13 +34,30 @@ func FastPower(g int, A uint) int {
 func PerfectPower(n int) bool {
 	var bMax = int(math.Log2(float64(n))) + 1
 	for b := 2; b <= bMax; b++ {
-		var aMin uint = 2
-		var aMax uint = uint(n)
-		var aMid uint = (aMin + aMax) / 2
+		var aMin = 2
+		var aMax = int(math.Pow(float64(2), float64(32)/float64(b))) - 1
+		if FastPower(b, aMin) == n {
+			return true
+		}
+		if FastPower(b, aMax) == n {
+			return true
+		}
 		for aMax-aMin != 1 {
-			var nMid uint = FastPower(n, b, aMid)
-			if (nMid == n) {
-				return
+			//fmt.Println(aMin)
+			//fmt.Println(aMin)
+			var aMid = (aMin + aMax) / 2
+			fmt.Println(aMin)
+			fmt.Println(aMax)
+			fmt.Println(aMid)
+			fmt.Println(b)
+			var nMid = FastPower(b, aMid)
+			fmt.Println(nMid)
+			if nMid == n {
+				return true
+			} else if nMid < n {
+				aMin = aMid
+			} else { // nMid > n
+				aMax = aMid
 			}
 		}
 	}
@@ -53,7 +72,7 @@ func AKS(n int) bool {
 		return false
 	}
 	// step 2 -- find r
-	var r int = 0
+	var r = 0
 	// step 3 -- check GCD between 1 and r
 
 	// step 4 -- if n <= r
@@ -64,4 +83,20 @@ func AKS(n int) bool {
 
 	// step 6 -- otherwise return true
 	return true
+}
+
+func main() {
+	var n = 49
+	var test = PerfectPower(n)
+	if test {
+		fmt.Println(strconv.Itoa(n) + " is a perfect power")
+	} else {
+		fmt.Println(strconv.Itoa(n) + " is not a perfect power")
+	}
+	//for n := 2; n <= 10000; n++ {
+	//	var test = PerfectPower(n)
+	//	if test {
+	//		fmt.Println(strconv.Itoa(n) + " is a perfect power")
+	//	}
+	//}
 }
