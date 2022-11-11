@@ -35,7 +35,7 @@ func PerfectPower(n int) bool {
 	var bMax = int(math.Log2(float64(n))) + 1
 	for b := 2; b <= bMax; b++ {
 		var aMin = 2
-		var aMax = int(math.Pow(float64(2), float64(32)/float64(b))) - 1
+		var aMax = int(math.Pow(float64(2), float64(64)/float64(b))) - 1
 		if FastPower(b, aMin) == n {
 			return true
 		}
