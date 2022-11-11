@@ -46,12 +46,7 @@ func PerfectPower(n int) bool {
 			//fmt.Println(aMin)
 			//fmt.Println(aMin)
 			var aMid = (aMin + aMax) / 2
-			fmt.Println(aMin)
-			fmt.Println(aMax)
-			fmt.Println(aMid)
-			fmt.Println(b)
-			var nMid = FastPower(b, aMid)
-			fmt.Println(nMid)
+			var nMid = FastPower(aMid, b)
 			if nMid == n {
 				return true
 			} else if nMid < n {
@@ -86,17 +81,17 @@ func AKS(n int) bool {
 }
 
 func main() {
-	var n = 49
-	var test = PerfectPower(n)
-	if test {
-		fmt.Println(strconv.Itoa(n) + " is a perfect power")
-	} else {
-		fmt.Println(strconv.Itoa(n) + " is not a perfect power")
-	}
-	//for n := 2; n <= 10000; n++ {
-	//	var test = PerfectPower(n)
-	//	if test {
-	//		fmt.Println(strconv.Itoa(n) + " is a perfect power")
-	//	}
+	//var n = 49
+	//var test = PerfectPower(n)
+	//if test {
+	//	fmt.Println(strconv.Itoa(n) + " is a perfect power")
+	//} else {
+	//	fmt.Println(strconv.Itoa(n) + " is not a perfect power")
 	//}
+	for n := 2; n <= 10000; n++ {
+		var test = PerfectPower(n)
+		if test {
+			fmt.Println(strconv.Itoa(n) + " is a perfect power")
+		}
+	}
 }
