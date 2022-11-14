@@ -14,45 +14,45 @@ func ModN(N uint, i int) int {
 	return m
 }
 
-func GCD(a, b int) (int,int,int) {
+func GCD(a, b int) (int, int, int) {
 	if b == 0 {
-		return a,1,0
+		return a, 1, 0
 	}
 
-	var na , nb   bool 
+	var na, nb bool
 	if a < 0 {
-		na = true 
-		a *= -1 
+		na = true
+		a *= -1
 	}
 	if b < 0 {
 		nb = true
-		b *= -1 
+		b *= -1
 	}
 
-	var g, u, v int 
-	u = 1 
+	var g, u, v int
+	u = 1
 	g = a
-	x := 0  
-	y := b  
+	x := 0
+	y := b
 	for y != 0 {
-		t := ModN(uint(y),g) 
-		q := g / y 
-		s := u - q*x  
-		u = x 
-		g = y 
-		x = s 
-		y = t 
+		t := ModN(uint(y), g)
+		q := g / y
+		s := u - q*x
+		u = x
+		g = y
+		x = s
+		y = t
 	}
-	v = (g-a*u)/b  
-	
+	v = (g - a*u) / b
+
 	if !na && !nb {
-		return g, u, v 
+		return g, u, v
 	} else if !na && nb {
-		return g, u, -v 
+		return g, u, -v
 	} else if na && !nb {
-		return g, -u, v 
+		return g, -u, v
 	} else {
-		return g , -u, -v 
+		return g, -u, -v
 	}
 }
 
@@ -71,7 +71,7 @@ func OrderMod(a int, r int) int {
 	}*/
 	var i int = 1
 	for {
-		if(FastPowerMod(uint(r),a,uint(i)) == 1) {
+		if FastPowerMod(uint(r), a, uint(i)) == 1 {
 			return i
 		}
 		i++
@@ -94,27 +94,27 @@ func FastPower(g int, A int) int {
 }
 
 func FastPowerMod(N uint, g int, A uint) int {
-	var b int 
-	a := g 
-	b = 1 
+	var b int
+	a := g
+	b = 1
 	if A < 0 {
-		A = -A 
+		A = -A
 	}
 	for A > 0 {
-		if A % 2 == 1 {
-			b = ModN(N,b*a)
-		} 
-		a = ModN(N,a*a) 
-		A = A / 2 
+		if A%2 == 1 {
+			b = ModN(N, b*a)
+		}
+		a = ModN(N, a*a)
+		A = A / 2
 	}
 	return b
 }
 
 func stepTwo(n int) int {
-	var lower int = int(math.Log2(float64(n))*math.Log2(float64(n)))
+	var lower int = int(math.Log2(float64(n)) * math.Log2(float64(n)))
 	var r int = 2
 	for {
-		if(OrderMod(n,r)>lower) {
+		if OrderMod(n, r) > lower {
 			return r
 		}
 		r++
@@ -124,8 +124,14 @@ func stepTwo(n int) int {
 // EulerTotient function finds the number of numbers less than x that are relatively prime to x
 // timing is _____
 func EulerTotient(x int) int {
-
-	return 0
+	var y int = 0
+	for i := 0; i < x; i++ {
+		gcd, _, _ := GCD(i, x)
+		if gcd == 1 {
+			y++
+		}
+	}
+	return y
 }
 
 // PerfectPower determines whether n can be represented as a perfect power a^b
@@ -169,8 +175,8 @@ func AKS(n int) bool {
 	var r = stepTwo(n)
 	// step 3 -- check GCD between 1 and r
 	for i := 2; i <= r; i++ {
-		gcd, _, _ := GCD(n,i)
-		if(1<gcd && gcd<n) {
+		gcd, _, _ := GCD(n, i)
+		if 1 < gcd && gcd < n {
 			return false
 		}
 	}
@@ -198,6 +204,7 @@ func main() {
 	//		fmt.Println(strconv.Itoa(n) + " is a perfect power")
 	//	}
 	//}
-	fmt.Println(OrderMod(2739,674893))
+	//fmt.Println(OrderMod(2739, 674893))
 	//fmt.Println(stepTwo(29))
+	fmt.Println(EulerTotient(15))
 }
