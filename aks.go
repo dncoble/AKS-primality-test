@@ -17,7 +17,15 @@ func ModN(N uint, i int) int {
 // OrderMod returns the order of a modulo r
 // timing is ____
 func OrderMod(a int, r int) int {
-
+	var product int = a
+	var count int = 1
+	for true {
+		if(ModN(r,product)==1) {
+			return count
+		}
+		count++
+		product = product*a
+	}
 	return 0
 }
 
@@ -34,6 +42,17 @@ func FastPower(g int, A int) int {
 		A = A / 2
 	}
 	return b
+}
+
+func stepTwo(n int) int {
+	var lower int = math.Log2(n)*math.Log2(n)
+	var r int = 2
+	for true {
+		if(OrderMod(n,r)>lower) {
+			return r
+		}
+		r++
+	}
 }
 
 // EulerTotient function finds the number of numbers less than x that are relatively prime to x
