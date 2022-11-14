@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
-	"strconv"
+	//"strconv"
 )
 
 func ModN(N uint, i int) int {
@@ -14,19 +14,68 @@ func ModN(N uint, i int) int {
 	return m
 }
 
+func GCD(a, b int) (int,int,int) {
+	if b == 0 {
+		return a,1,0
+	}
+
+	var na , nb   bool 
+	if a < 0 {
+		na = true 
+		a *= -1 
+	}
+	if b < 0 {
+		nb = true
+		b *= -1 
+	}
+
+	var g, u, v int 
+	u = 1 
+	g = a
+	x := 0  
+	y := b  
+	for y != 0 {
+		t := ModN(uint(y),g) 
+		q := g / y 
+		s := u - q*x  
+		u = x 
+		g = y 
+		x = s 
+		y = t 
+	}
+	v = (g-a*u)/b  
+	
+	if !na && !nb {
+		return g, u, v 
+	} else if !na && nb {
+		return g, u, -v 
+	} else if na && !nb {
+		return g, -u, v 
+	} else {
+		return g , -u, -v 
+	}
+}
+
 // OrderMod returns the order of a modulo r
 // timing is ____
 func OrderMod(a int, r int) int {
-	var product int = a
+	/*var product int = a
 	var count int = 1
-	for true {
-		if(ModN(r,product)==1) {
+	for {
+		if(ModN(uint(r),product)==1) {
 			return count
 		}
+		fmt.Println(count, product, ModN(uint(r),product))
 		count++
 		product = product*a
+	}*/
+	var i int = 1
+	for {
+		if(FastPowerMod(uint(r),a,uint(i)) == 1) {
+			return i
+		}
+		i++
 	}
-	return 0
 }
 
 // FastPower (without modulo by N)
@@ -44,10 +93,27 @@ func FastPower(g int, A int) int {
 	return b
 }
 
+func FastPowerMod(N uint, g int, A uint) int {
+	var b int 
+	a := g 
+	b = 1 
+	if A < 0 {
+		A = -A 
+	}
+	for A > 0 {
+		if A % 2 == 1 {
+			b = ModN(N,b*a)
+		} 
+		a = ModN(N,a*a) 
+		A = A / 2 
+	}
+	return b
+}
+
 func stepTwo(n int) int {
-	var lower int = math.Log2(n)*math.Log2(n)
+	var lower int = int(math.Log2(float64(n))*math.Log2(float64(n)))
 	var r int = 2
-	for true {
+	for {
 		if(OrderMod(n,r)>lower) {
 			return r
 		}
@@ -100,9 +166,14 @@ func AKS(n int) bool {
 		return false
 	}
 	// step 2 -- find r
-	var r = 0
+	var r = stepTwo(n)
 	// step 3 -- check GCD between 1 and r
-
+	for i := 2; i <= r; i++ {
+		gcd, _, _ := GCD(n,i)
+		if(1<gcd && gcd<n) {
+			return false
+		}
+	}
 	// step 4 -- if n <= r
 	if n <= r {
 		return true
@@ -121,10 +192,12 @@ func main() {
 	//} else {
 	//	fmt.Println(strconv.Itoa(n) + " is not a perfect power")
 	//}
-	for n := 2; n <= 10000; n++ {
-		var test = PerfectPower(n)
-		if test {
-			fmt.Println(strconv.Itoa(n) + " is a perfect power")
-		}
-	}
+	//for n := 2; n <= 10000; n++ {
+	//	var test = PerfectPower(n)
+	//	if test {
+	//		fmt.Println(strconv.Itoa(n) + " is a perfect power")
+	//	}
+	//}
+	fmt.Println(OrderMod(2739,674893))
+	//fmt.Println(stepTwo(29))
 }
