@@ -59,16 +59,10 @@ func GCD(a, b int) (int, int, int) {
 // OrderMod returns the order of a modulo r
 // timing is ____
 func OrderMod(a int, r int) int {
-	/*var product int = a
-	var count int = 1
-	for {
-		if(ModN(uint(r),product)==1) {
-			return count
-		}
-		fmt.Println(count, product, ModN(uint(r),product))
-		count++
-		product = product*a
-	}*/
+	gcd, _, _ := GCD(a, r)
+	if gcd != 1 {
+		return 0
+	}
 	var i int = 1
 	for {
 		if FastPowerMod(uint(r), a, uint(i)) == 1 {
@@ -110,7 +104,7 @@ func FastPowerMod(N uint, g int, A uint) int {
 	return b
 }
 
-func stepTwo(n int) int {
+func StepTwo(n int) int {
 	var lower int = int(math.Log2(float64(n)) * math.Log2(float64(n)))
 	var r int = 2
 	for {
@@ -148,8 +142,6 @@ func PerfectPower(n int) bool {
 			return true
 		}
 		for aMax-aMin != 1 {
-			//fmt.Println(aMin)
-			//fmt.Println(aMin)
 			var aMid = (aMin + aMax) / 2
 			var nMid = FastPower(aMid, b)
 			if nMid == n {
@@ -172,7 +164,7 @@ func AKS(n int) bool {
 		return false
 	}
 	// step 2 -- find r
-	var r = stepTwo(n)
+	var r = StepTwo(n)
 	// step 3 -- check GCD between 1 and r
 	for i := 2; i <= r; i++ {
 		gcd, _, _ := GCD(n, i)
