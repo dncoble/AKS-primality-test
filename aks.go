@@ -72,6 +72,25 @@ func OrderMod(a int, r int) int {
 	}
 }
 
+type Polynomial struct {
+	d int //order
+	c int[] // coefficients
+}
+
+// PolynomialFastPower x^n mod(y, N)
+func PolynomialFastPower(x Polynomial, n int, y Polynomial, int N) Polynomial {
+	var b Polynomial
+	a := x
+	b = Polynomial(1, [1])
+	for n > 0 {
+		if n%2 == 1 {
+			b = PolynomialMod(PolynomialMultiply(b, a), 
+		}
+		a = PolynomialMultiply(a, a)
+		A = A / 2
+	}
+	return b
+}
 // FastPower (without modulo by N)
 func FastPower(g int, A int) int {
 	var b int
