@@ -71,6 +71,10 @@ func OrderMod(a int, r int) int {
 	}
 }
 
+// Polynomial struct contains data for representing a polynomial.
+// d is the degree of the polynomial
+// coefs []int is an integer list of the coefficients, so the list {c_0, c_1, c_2,...,c_d}
+// from the polynomial c_0*x^0 + c_1*x^1 + c_2*x^2 + ... + c_d*x^d
 type Polynomial struct {
 	d     int   //order
 	coefs []int // coefficients
@@ -93,9 +97,9 @@ func PolynomialMultiply(x, y Polynomial) Polynomial {
 	return Polynomial{dx * dy, coefs}
 }
 
-// PolynomialMod x mod y using polynomial division algorithm
+// PolynomialMod x mod y, N for x, y polynomial and N integer
 // timing is ___
-func PolynomialMod(x, y Polynomial) Polynomial {
+func PolynomialMod(x, y Polynomial, N int) Polynomial {
 	return Polynomial{1, []int{1}}
 }
 
@@ -107,7 +111,7 @@ func PolynomialFastPower(x Polynomial, n int, y Polynomial, N int) Polynomial {
 	b = Polynomial{1, []int{1}}
 	for n > 0 {
 		if n%2 == 1 {
-			b = PolynomialMod(PolynomialMultiply(b, a), y)
+			b = PolynomialMod(PolynomialMultiply(b, a), y, N)
 		}
 		a = PolynomialMultiply(a, a)
 		n = n / 2
