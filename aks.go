@@ -82,41 +82,74 @@ type Polynomial struct {
 
 // PolynomialMultiply multiplies two polynomials represented by Polynomial struct
 // timing is product of orders of the polynomials
-func PolynomialMultiply(x, y Polynomial) Polynomial {
-	dx := x.d
-	dy := y.d
+func PolynomialMultiply(X, Y Polynomial) Polynomial {
+	dx := X.d
+	dy := Y.d
 	coefs := make([]int, dx*dy+1)
 	for i := 0; i < len(coefs); i++ {
 		coefs[i] = 0
 	}
-	for i, c1 := range x.coefs {
-		for j, c2 := range y.coefs {
+	for i, c1 := range X.coefs {
+		for j, c2 := range Y.coefs {
 			coefs[i+j] += c1 * c2
 		}
 	}
 	return Polynomial{dx * dy, coefs}
 }
 
-// PolynomialMod x mod y, N for x, y polynomial and N integer
+// PolynomialAdd does polynomial addition between the two given polynomials
+// timing is the minimum of the degrees of the polynomials
+func PolynomialAdd(X, Y Polynomial) Polynomial {
+	// take the upper limit as the min degree between X and Y
+	var poly1 Polynomial
+	var poly2 Polynomial
+	if X.d < Y.d { // Y has the greater degree
+		poly1 = Y
+		poly2 = X
+	} else {
+		poly1 = X
+		poly2 = Y
+	}
+	var coefs = poly1.coefs
+	for i := 0; i < poly2.d+1; i++ {
+		coefs[i] += poly2.coefs[i]
+	}
+	return Polynomial{len(coefs) + 1, coefs}
+}
+
+// PolynomialMod X mod (Y, N) for X, Y polynomial and N integer, using the polynomial division algorithm
 // timing is ___
-func PolynomialMod(x, y Polynomial, N int) Polynomial {
+func PolynomialMod(X, Y Polynomial, N int) Polynomial {
 	return Polynomial{1, []int{1}}
 }
 
-// PolynomialFastPower x^n mod(y, N) with x, y polynomials and n, N integers
+// PolynomialFastPower X^n mod(Y, N) with X, Y polynomials and n, N integers
 // timing is ____
-func PolynomialFastPower(x Polynomial, n int, y Polynomial, N int) Polynomial {
+func PolynomialFastPower(X Polynomial, n int, Y Polynomial, N int) Polynomial {
 	var b Polynomial
-	a := x
-	b = Polynomial{1, []int{1}}
+	A := X
+	b = Polynomial{0, []int{1}}
 	for n > 0 {
 		if n%2 == 1 {
-			b = PolynomialMod(PolynomialMultiply(b, a), y, N)
+			b = PolynomialMod(PolynomialMultiply(b, A), Y, N)
 		}
-		a = PolynomialMultiply(a, a)
+		A = PolynomialMultiply(A, A)
 		n = n / 2
 	}
 	return b
+}
+
+// PolynomialEquality check whether degree and all coefficients of two polynomials are equal
+func PolynomialEquality(X, Y Polynomial) bool {
+	if X.d != Y.d {
+		return false
+	}
+	for i := 0; i < X.d+1; i++ {
+		if X.coefs[i] != Y.coefs[i] {
+			return false
+		}
+	}
+	return true
 }
 
 // FastPower (without modulo by N)
@@ -160,6 +193,33 @@ func StepTwo(n int) int {
 		}
 		r++
 	}
+}
+
+func StepFive(n int, r int) bool {
+	var upper int = int(math.Floor(math.Sqrt(float64(EulerTotient(r))) * math.Log2(float64(n))))
+	// modPolynomial is X^r - 1
+	var modPolynomialCoefs = make([]int, r+1)
+	for i := 0; i < r+1; i++ { // instantiate modPolynomial coefs
+		if i == 0 {
+			modPolynomialCoefs[i] = -1
+		} else if i == r {
+			modPolynomialCoefs[i] = 1
+		} else {
+			modPolynomialCoefs[i] = 0
+		}
+	}
+	var modPolynomial = Polynomial{r, modPolynomialCoefs}
+	for a := 1; a <= upper; a++ {
+		// left polynomial is (X+a)^n mod
+		var leftPolynomial = PolynomialFastPower(Polynomial{1, []int{a, 1}}, n, modPolynomial, n)
+		// right polynomial is X^n + a
+		var rightPolynomial = PolynomialFastPower(Polynomial{1, []int{0, 1}}, n, modPolynomial, n)
+		rightPolynomial = PolynomialAdd(rightPolynomial, Polynomial{0, []int{a}})
+		if !PolynomialEquality(leftPolynomial, rightPolynomial) {
+			return false
+		}
+	}
+	return true
 }
 
 // EulerTotient function finds the number of numbers less than x that are relatively prime to x
@@ -224,9 +284,7 @@ func AKS(n int) bool {
 		return true
 	}
 	// step 5 -- for loop
-
-	// step 6 -- otherwise return true
-	return true
+	return StepFive(n, r)
 }
 
 func main() {
