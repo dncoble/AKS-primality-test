@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	//"strconv"
 )
@@ -73,42 +72,49 @@ func OrderMod(a int, r int) int {
 }
 
 type Polynomial struct {
-	d int //order
-	coefs int[] // coefficients
+	d     int   //order
+	coefs []int // coefficients
 }
 
 // PolynomialMultiply multiplies two polynomials represented by Polynomial struct
 // timing is product of orders of the polynomials
 func PolynomialMultiply(x, y Polynomial) Polynomial {
-	dx = x.d
-	dy = y.d
-	var coefs int[] = int[dx*dy]
-	for i := 0; i < len(coefs) {
+	dx := x.d
+	dy := y.d
+	coefs := make([]int, dx*dy+1)
+	for i := 0; i < len(coefs); i++ {
 		coefs[i] = 0
 	}
 	for i, c1 := range x.coefs {
 		for j, c2 := range y.coefs {
-			coefs[i+j] = c1*c2
+			coefs[i+j] += c1 * c2
 		}
 	}
-	return Polynomial{dx*dy, coefs}
+	return Polynomial{dx * dy, coefs}
+}
+
+// PolynomialMod x mod y using polynomial division algorithm
+// timing is ___
+func PolynomialMod(x, y Polynomial) Polynomial {
+	return Polynomial{1, []int{1}}
 }
 
 // PolynomialFastPower x^n mod(y, N) with x, y polynomials and n, N integers
 // timing is ____
-func PolynomialFastPower(x Polynomial, n int, y Polynomial, int N) Polynomial {
+func PolynomialFastPower(x Polynomial, n int, y Polynomial, N int) Polynomial {
 	var b Polynomial
 	a := x
-	b = Polynomial(1, [1])
+	b = Polynomial{1, []int{1}}
 	for n > 0 {
 		if n%2 == 1 {
 			b = PolynomialMod(PolynomialMultiply(b, a), y)
 		}
 		a = PolynomialMultiply(a, a)
-		A = A / 2
+		n = n / 2
 	}
 	return b
 }
+
 // FastPower (without modulo by N)
 func FastPower(g int, A int) int {
 	var b int
@@ -237,10 +243,10 @@ func main() {
 	//fmt.Println(stepTwo(29))
 	// fmt.Println(EulerTotient(15))
 	// test polynomial multiplication
-	x := Polynomial{2, {1, 1, 1}}
-	y := Polynomial{2, {1, 2, 3}}
-	z := PolynomialMultiply(x, y)
-	for _, i := range z.coefs {
-		fmt.Println(i)
-	}
+	//x := Polynomial{2, []int{1, 1, 1}}
+	//y := Polynomial{2, []int{1, 2, 3}}
+	//z := PolynomialMultiply(x, y)
+	//for _, i := range z.coefs {
+	//	fmt.Println(i)
+	//}
 }
