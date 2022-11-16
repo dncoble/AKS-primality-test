@@ -74,17 +74,35 @@ func OrderMod(a int, r int) int {
 
 type Polynomial struct {
 	d int //order
-	c int[] // coefficients
+	coefs int[] // coefficients
 }
 
-// PolynomialFastPower x^n mod(y, N)
+// PolynomialMultiply multiplies two polynomials represented by Polynomial struct
+// timing is product of orders of the polynomials
+func PolynomialMultiply(x, y Polynomial) Polynomial {
+	dx = x.d
+	dy = y.d
+	var coefs int[] = int[dx*dy]
+	for i := 0; i < len(coefs) {
+		coefs[i] = 0
+	}
+	for i, c1 := range x.coefs {
+		for j, c2 := range y.coefs {
+			coefs[i+j] = c1*c2
+		}
+	}
+	return Polynomial{dx*dy, coefs}
+}
+
+// PolynomialFastPower x^n mod(y, N) with x, y polynomials and n, N integers
+// timing is ____
 func PolynomialFastPower(x Polynomial, n int, y Polynomial, int N) Polynomial {
 	var b Polynomial
 	a := x
 	b = Polynomial(1, [1])
 	for n > 0 {
 		if n%2 == 1 {
-			b = PolynomialMod(PolynomialMultiply(b, a), 
+			b = PolynomialMod(PolynomialMultiply(b, a), y)
 		}
 		a = PolynomialMultiply(a, a)
 		A = A / 2
@@ -217,5 +235,12 @@ func main() {
 	//}
 	//fmt.Println(OrderMod(2739, 674893))
 	//fmt.Println(stepTwo(29))
-	fmt.Println(EulerTotient(15))
+	// fmt.Println(EulerTotient(15))
+	// test polynomial multiplication
+	x := Polynomial{2, {1, 1, 1}}
+	y := Polynomial{2, {1, 2, 3}}
+	z := PolynomialMultiply(x, y)
+	for _, i := range z.coefs {
+		fmt.Println(i)
+	}
 }
