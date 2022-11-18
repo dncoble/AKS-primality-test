@@ -152,6 +152,38 @@ func PolynomialEquality(X, Y Polynomial) bool {
 	return true
 }
 
+//polynomial i divided by poynomial N
+
+func PolynomialRemainder(i Polynomial, N Polynomial) Polynomial {
+	orderi := i.d
+	orderN := N.d
+	ci := i.coefs
+	cN := N.coefs
+	//count := len(cN)
+	temp := i
+	tempCoef := make([]int, len(ci), len(ci))
+	for i := 0; i < len(cN); i++ {
+		tempCoef[i] = cN[i]
+	}
+	var scalar int
+	currentOrder := orderi - orderN
+	for i := 0; i < 3; i++ {
+		if currentOrder >= 0 {
+			scalar = int((math.Floor(float64(temp.coefs[0] / cN[0])))) * (-1)
+			for i := range cN {
+				//change?
+				tempCoef[i] = cN[i] * scalar
+			}
+			if len(tempCoef) != len(temp.coefs) {
+				tempCoef = tempCoef[:len(temp.coefs)]
+			}
+			temp = PolynomialAdd(temp, Polynomial{currentOrder + orderN, tempCoef})
+			currentOrder = temp.d - orderN
+		}
+	}
+	return temp
+}
+
 // FastPower (without modulo by N)
 func FastPower(g int, A int) int {
 	var b int
