@@ -2,8 +2,6 @@ package main
 
 import (
 	"math"
-	"fmt"
-	//"strconv"
 )
 
 func ModN(N uint, i int) int {
@@ -116,19 +114,19 @@ func PolynomialAdd(X, Y Polynomial) Polynomial {
 		coefs[i] += poly2.coefs[i]
 	}
 	for {
-        if coefs[0] == 0 {
-            coefs = coefs[1:]
-        } else {
-            break
-        }
-    }
+		if coefs[0] == 0 {
+			coefs = coefs[1:]
+		} else {
+			break
+		}
+	}
 	return Polynomial{len(coefs) - 1, coefs}
 }
 
 // PolynomialMod X mod (Y, N) for X, Y polynomial and N integer, using the polynomial division algorithm
 // timing is ___
 func PolynomialMod(X, Y Polynomial, N int) Polynomial {
-	m := PolynomialRemainder(X,Y)
+	m := PolynomialRemainder(X, Y)
 	for c := 0; c < len(m.coefs); c++ {
 		m.coefs[c] = ModN(uint(N), m.coefs[c])
 	}
@@ -329,34 +327,41 @@ func AKS(n int) bool {
 	return StepFive(n, r)
 }
 
-func main() {
-	//var n = 49
-	//var test = PerfectPower(n)
-	//if test {
-	//	fmt.Println(strconv.Itoa(n) + " is a perfect power")
-	//} else {
-	//	fmt.Println(strconv.Itoa(n) + " is not a perfect power")
-	//}
-	//for n := 2; n <= 10000; n++ {
-	//	var test = PerfectPower(n)
-	//	if test {
-	//		fmt.Println(strconv.Itoa(n) + " is a perfect power")
-	//	}
-	//}
-	//fmt.Println(OrderMod(2739, 674893))
-	//fmt.Println(stepTwo(29))
-	// fmt.Println(EulerTotient(15))
-	// test polynomial multiplication
-	//x := Polynomial{2, []int{1, 1, 1}}
-	//y := Polynomial{2, []int{1, 2, 3}}
-	//z := PolynomialMultiply(x, y)
-	//for _, i := range z.coefs {
-	//	fmt.Println(i)
-	//}
-	ac := []int{1,0,2,0,0}
-	bc := []int{1,0,-1}
-	a := Polynomial{4,ac}
-	b := Polynomial{2,bc}
-	//fmt.Println(PolynomialRemainder(a,b))
-	fmt.Println(PolynomialMod(a,b,3))
-}
+// func main() {
+//var n = 49
+//var test = PerfectPower(n)
+//if test {
+//	fmt.Println(strconv.Itoa(n) + " is a perfect power")
+//} else {
+//	fmt.Println(strconv.Itoa(n) + " is not a perfect power")
+//}
+//for n := 2; n <= 10000; n++ {
+//	var test = PerfectPower(n)
+//	if test {
+//		fmt.Println(strconv.Itoa(n) + " is a perfect power")
+//	}
+//}
+//fmt.Println(OrderMod(2739, 674893))
+//fmt.Println(stepTwo(29))
+// fmt.Println(EulerTotient(15))
+// test polynomial multiplication
+//x := Polynomial{2, []int{1, 1, 1}}
+//y := Polynomial{2, []int{1, 2, 3}}
+//z := PolynomialMultiply(x, y)
+//for _, i := range z.coefs {
+//	fmt.Println(i)
+//}
+//	ac := []int{1, 0, 2, 0, 0}
+//	bc := []int{1, 0, -1}
+//	a := Polynomial{4, ac}
+//	b := Polynomial{2, bc}
+//	//fmt.Println(PolynomialRemainder(a,b))
+//	fmt.Println(PolynomialMod(a, b, 3))
+//
+//	// test first 10,000 numbers, print if its prime
+//	for i := 2; i <= 10000; i++ {
+//		if AKS(i) {
+//			fmt.Println(strconv.Itoa(i) + " is prime.")
+//		}
+//	}
+//}
