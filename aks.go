@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"fmt"
 	//"strconv"
 )
 
@@ -114,13 +115,24 @@ func PolynomialAdd(X, Y Polynomial) Polynomial {
 	for i := 0; i < poly2.d+1; i++ {
 		coefs[i] += poly2.coefs[i]
 	}
-	return Polynomial{len(coefs) + 1, coefs}
+	for {
+        if coefs[0] == 0 {
+            coefs = coefs[1:]
+        } else {
+            break
+        }
+    }
+	return Polynomial{len(coefs) - 1, coefs}
 }
 
 // PolynomialMod X mod (Y, N) for X, Y polynomial and N integer, using the polynomial division algorithm
 // timing is ___
 func PolynomialMod(X, Y Polynomial, N int) Polynomial {
-	return Polynomial{1, []int{1}}
+	m := PolynomialRemainder(X,Y)
+	for c := 0; c < len(m.coefs); c++ {
+		m.coefs[c] = ModN(uint(N), m.coefs[c])
+	}
+	return m
 }
 
 // PolynomialFastPower X^n mod(Y, N) with X, Y polynomials and n, N integers
@@ -159,7 +171,6 @@ func PolynomialRemainder(i Polynomial, N Polynomial) Polynomial {
 	orderN := N.d
 	ci := i.coefs
 	cN := N.coefs
-	//count := len(cN)
 	temp := i
 	tempCoef := make([]int, len(ci), len(ci))
 	for i := 0; i < len(cN); i++ {
@@ -171,7 +182,6 @@ func PolynomialRemainder(i Polynomial, N Polynomial) Polynomial {
 		if currentOrder >= 0 {
 			scalar = int((math.Floor(float64(temp.coefs[0] / cN[0])))) * (-1)
 			for i := range cN {
-				//change?
 				tempCoef[i] = cN[i] * scalar
 			}
 			if len(tempCoef) != len(temp.coefs) {
@@ -343,4 +353,10 @@ func main() {
 	//for _, i := range z.coefs {
 	//	fmt.Println(i)
 	//}
+	ac := []int{1,0,2,0,0}
+	bc := []int{1,0,-1}
+	a := Polynomial{4,ac}
+	b := Polynomial{2,bc}
+	//fmt.Println(PolynomialRemainder(a,b))
+	fmt.Println(PolynomialMod(a,b,3))
 }
