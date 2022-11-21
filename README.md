@@ -1,7 +1,11 @@
 # AKS primality test
 The [AKS primality test](https://www.cse.iitk.ac.in/users/manindra/algebra/primality_v6.pdf) (discovered by Agrawal, Kayal, and Saxena) is the first discovered polynomial-time algorithm for testing primality of a given number.
 
-## How to use
+## Current progress
+A draft code has been written which goes through all five steps, but it has not been checked/debugged.
+
+## Testing the code
+main.go runs a program which checks primality of the first 10,000 natural numbers. To check whether the AKS algorithm produces the correct answer, primality is also tested with the Miller-Rabin test. The Miller-Rabin test is assured to produce the correct answer so long as the Riemann Hypothesis is true. 
 
 ## How it works
 
@@ -15,7 +19,6 @@ Input: integer n > 1.
     
     if ( $(X+a)^n \neq X^n+a \quad (\operatorname{mod} X^r-1, n)$ ), output `COMPOSITE`.
 6. Output `PRIME`.
-
 
 ## Citations
 
