@@ -86,7 +86,7 @@ type Polynomial struct {
 func PolynomialMultiply(X, Y Polynomial) Polynomial {
 	dx := X.d
 	dy := Y.d
-	coefs := make([]int, dx*dy+1)
+	coefs := make([]int, dx+dy+1)
 	for i := 0; i < len(coefs); i++ {
 		coefs[i] = 0
 	}
@@ -95,7 +95,7 @@ func PolynomialMultiply(X, Y Polynomial) Polynomial {
 			coefs[i+j] += c1 * c2
 		}
 	}
-	return Polynomial{dx * dy, coefs}
+	return Polynomial{len(coefs) - 1, coefs}
 }
 
 // PolynomialAdd does polynomial addition between the two given polynomials
@@ -365,5 +365,11 @@ func main() {
 		if AKS(i) {
 			fmt.Println(strconv.Itoa(i) + " is prime.")
 		}
+	}
+	i := 31
+	if AKS(i) {
+		fmt.Println(strconv.Itoa(i) + " is prime.")
+	} else {
+		fmt.Println(strconv.Itoa(i) + " is not prime.")
 	}
 }
