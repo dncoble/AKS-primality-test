@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"math"
+	"strconv"
 )
 
 func ModN(N uint, i int) int {
@@ -327,41 +329,41 @@ func AKS(n int) bool {
 	return StepFive(n, r)
 }
 
-// func main() {
-//var n = 49
-//var test = PerfectPower(n)
-//if test {
-//	fmt.Println(strconv.Itoa(n) + " is a perfect power")
-//} else {
-//	fmt.Println(strconv.Itoa(n) + " is not a perfect power")
-//}
-//for n := 2; n <= 10000; n++ {
-//	var test = PerfectPower(n)
-//	if test {
-//		fmt.Println(strconv.Itoa(n) + " is a perfect power")
-//	}
-//}
-//fmt.Println(OrderMod(2739, 674893))
-//fmt.Println(stepTwo(29))
-// fmt.Println(EulerTotient(15))
-// test polynomial multiplication
-//x := Polynomial{2, []int{1, 1, 1}}
-//y := Polynomial{2, []int{1, 2, 3}}
-//z := PolynomialMultiply(x, y)
-//for _, i := range z.coefs {
-//	fmt.Println(i)
-//}
-//	ac := []int{1, 0, 2, 0, 0}
-//	bc := []int{1, 0, -1}
-//	a := Polynomial{4, ac}
-//	b := Polynomial{2, bc}
-//	//fmt.Println(PolynomialRemainder(a,b))
-//	fmt.Println(PolynomialMod(a, b, 3))
-//
-//	// test first 10,000 numbers, print if its prime
-//	for i := 2; i <= 10000; i++ {
-//		if AKS(i) {
-//			fmt.Println(strconv.Itoa(i) + " is prime.")
-//		}
-//	}
-//}
+func main() {
+	//var n = 49
+	//var test = PerfectPower(n)
+	//if test {
+	//	fmt.Println(strconv.Itoa(n) + " is a perfect power")
+	//} else {
+	//	fmt.Println(strconv.Itoa(n) + " is not a perfect power")
+	//}
+	//for n := 2; n <= 10000; n++ {
+	//	var test = PerfectPower(n)
+	//	if test {
+	//		fmt.Println(strconv.Itoa(n) + " is a perfect power")
+	//	}
+	//}
+	//fmt.Println(OrderMod(2739, 674893))
+	//fmt.Println(StepTwo(29))
+	//fmt.Println(EulerTotient(15))
+	//// test polynomial multiplication
+	//x := Polynomial{2, []int{1, 1, 1}}
+	//y := Polynomial{2, []int{1, 2, 3}}
+	//z := PolynomialMultiply(x, y)
+	//for _, i := range z.coefs {
+	//	fmt.Println(i)
+	//}
+	//ac := []int{1, 0, 2, 0, 0}
+	//bc := []int{1, 0, -1}
+	//a := Polynomial{4, ac}
+	//b := Polynomial{2, bc}
+	////fmt.Println(PolynomialRemainder(a,b))
+	//fmt.Println(PolynomialMod(a, b, 3))
+
+	// test first 10,000 numbers, print if its prime
+	for i := 2; i <= 10000; i++ {
+		if AKS(i) {
+			fmt.Println(strconv.Itoa(i) + " is prime.")
+		}
+	}
+}
