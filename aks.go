@@ -154,7 +154,7 @@ func PolynomialFastPower(X Polynomial, n int, Y Polynomial, N int) Polynomial {
 		if n%2 == 1 {
 			b = PolynomialMod(PolynomialMultiply(b, A), Y, N)
 		}
-		A = PolynomialMultiply(A, A)
+		A = PolynomialMod(PolynomialMultiply(A, A), Y, N)
 		n = n / 2
 	}
 	return b
@@ -250,24 +250,21 @@ func StepTwo(n int) int {
 
 func StepFive(n int, r int) bool {
 	var upper int = int(math.Floor(math.Sqrt(float64(EulerTotient(r))) * math.Log2(float64(n))))
+	//fmt.Println(upper)
 	// modPolynomial is X^r - 1
 	var modPolynomialCoefs = make([]int, r+1)
-	for i := 0; i < r+1; i++ { // instantiate modPolynomial coefs
-		if i == 0 {
-			modPolynomialCoefs[i] = 1
-		} else if i == r {
-			modPolynomialCoefs[i] = -1
-		} else {
-			modPolynomialCoefs[i] = 0
-		}
-	}
+	modPolynomialCoefs[0] = 1
+	modPolynomialCoefs[r] = -1
 	var modPolynomial = Polynomial{r, modPolynomialCoefs}
+	//fmt.Println(modPolynomial)
 	for a := 1; a <= upper; a++ {
 		// left polynomial is (X+a)^n mod
 		var leftPolynomial = PolynomialFastPower(Polynomial{1, []int{1, a}}, n, modPolynomial, n)
+		//fmt.Println(leftPolynomial)
 		// right polynomial is X^n + a
 		var rightPolynomial = PolynomialFastPower(Polynomial{1, []int{1, 0}}, n, modPolynomial, n)
 		rightPolynomial = PolynomialAdd(rightPolynomial, Polynomial{0, []int{a}})
+		//fmt.Println(rightPolynomial)
 		//fmt.Println(a)
 		//fmt.Println("")
 		//for _, c := range leftPolynomial.coefs {
@@ -343,7 +340,7 @@ func AKS(n int) bool {
 	return StepFive(n, r)
 }
 
-func main() {
+//func main() {
 	//var n = 49
 	//var test = PerfectPower(n)
 	//if test {
@@ -376,8 +373,8 @@ func main() {
 
 	// test first 10,000 numbers, print if its prime
 	//for i := 2; i <= 10000; i++ {
-	//	if AKS(i) {
-	//		fmt.Println(strconv.Itoa(i) + " is prime.")
+	//if AKS(i) {
+	//	fmt.Println(strconv.Itoa(i) + " is prime.")
 	//	}
 	//}
 	//N := Polynomial{2, []int{1, 0, 1}}
@@ -387,12 +384,12 @@ func main() {
 	//for _, c := range z.coefs {
 	//	fmt.Println(c)
 	//}
-	i := 31
-	if AKS(i) {
-		fmt.Println(strconv.Itoa(i) + " is prime.")
-	} else {
-		fmt.Println(strconv.Itoa(i) + " is not prime.")
-	}
+	//i := 31
+	//if AKS(i) {
+	//	fmt.Println(strconv.Itoa(i) + " is prime.")
+	//} else {
+	//	fmt.Println(strconv.Itoa(i) + " is not prime.")
+	//}
 	//
 	//i := Polynomial{2, []int{1, 0, 1}}
 	//N := Polynomial{5, []int{1, 5, 5, 6, 7, 9}}
@@ -401,4 +398,5 @@ func main() {
 	//for _, c := range z.coefs {
 	//	fmt.Println(c)
 	//}
-}
+	
+//}
