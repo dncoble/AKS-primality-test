@@ -20,6 +20,30 @@ Input: integer n > 1.
     if ( $(X+a)^n \neq X^n+a \quad (\operatorname{mod} X^r-1, n)$ ), output `COMPOSITE`.
 6. Output `PRIME`.
 
+## Functions and timing analysis
+
+Computational complexity of Polynomial functions is given in terms of the order of the polynomial, while other functions are given in the size of the integer input.
+|Function|Description|Timing|
+|--------|-----------|------|
+|`ModN`| | $\mathcal O ()$ |
+|`GCD`| | $\mathcal O ()$ |
+|`OrderMod`| | $\mathcal O ()$ |
+|`PolynomialMultiply`| | $\mathcal O (n^2)$ |
+|`PolynomialAdd`| | $\mathcal O (n)$|
+|`PolynomialMod`| | $\mathcal O ()$ |
+|`PolynomialFastPower`| | $\mathcal O ()$ |
+|`PolynomialEquality`| | $\mathcal O (n)$ |
+|`PolynomialRemainder`| | $\mathcal O ()$ |
+|`FastPower`| | $\mathcal O (\log(n))$ |
+|`FastPowerMod`| | $\mathcal O ()$ |
+|`StepTwo`| | $\mathcal O ()$ |
+|`StepFive`| | $\mathcal O ()$ |
+|`EulerTotient`| | $\mathcal O ()$ |
+|`PerfectPower`| | $\mathcal O ()$ |
+|`AKS`| | $\mathcal O ()$ |
+
+
+
 ## Citations
 
 ## License
