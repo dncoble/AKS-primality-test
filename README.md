@@ -25,22 +25,22 @@ Input: integer n > 1.
 Computational complexity of Polynomial functions is given in terms of the order of the polynomial, while other functions are given in the size of the integer input.
 |Function|Description|Timing|
 |--------|-----------|------|
-|`ModN`| | $\mathcal O ()$ |
-|`GCD`| | $\mathcal O ()$ |
-|`OrderMod`| | $\mathcal O ()$ |
+|`ModN`| | $\mathcal O (1)$ |
+|`GCD`| | $\mathcal O (\log(n))$ |
+|`OrderMod`| | $\mathcal O (n\log(n))$ |
 |`PolynomialMultiply`| | $\mathcal O (n^2)$ |
 |`PolynomialAdd`| | $\mathcal O (n)$|
-|`PolynomialMod`| | $\mathcal O ()$ |
-|`PolynomialFastPower`| | $\mathcal O ()$ |
+|`PolynomialMod`| | $\mathcal O (n^2)$ |
+|`PolynomialFastPower`| | $\mathcal O (n^3)$ |
 |`PolynomialEquality`| | $\mathcal O (n)$ |
-|`PolynomialRemainder`| | $\mathcal O ()$ |
+|`PolynomialRemainder`| | $\mathcal O (n^2)$ |
 |`FastPower`| | $\mathcal O (\log(n))$ |
-|`FastPowerMod`| | $\mathcal O ()$ |
-|`StepTwo`| | $\mathcal O ()$ |
-|`StepFive`| | $\mathcal O ()$ |
-|`EulerTotient`| | $\mathcal O ()$ |
-|`PerfectPower`| | $\mathcal O ()$ |
-|`AKS`| | $\mathcal O ()$ |
+|`FastPowerMod`| | $\mathcal O (\log(n))$ |
+|`StepTwo`| | $\mathcal O (\log^5(n))$* |
+|`StepFive`| | $\mathcal O (\log^{21/2}(n))$**|
+|`EulerTotient`| | $\mathcal O (n\log(n))$ |
+|`PerfectPower`| | $\mathcal O (\log^3(n))$ |
+|`AKS`| | $\mathcal O (\log^{21/2}(n))$**|
 
 
 
