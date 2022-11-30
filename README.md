@@ -22,7 +22,7 @@ Input: integer n > 1.
 
 ## Functions and timing analysis
 
-Computational complexity of Polynomial functions is given in terms of the order of the polynomial, while other functions are given in the size of the integer input.
+Computational complexity of Polynomial functions is given in terms of the order of the polynomial, while other functions are given in the size of the integer input. All exponential functions are called by `AKS` with $\log$-bounded inputs, producing in total a polynomial-time algorithm.
 |Function|Description|Timing|
 |--------|-----------|------|
 |`ModN`| | $\mathcal O (1)$ |
@@ -37,11 +37,14 @@ Computational complexity of Polynomial functions is given in terms of the order 
 |`FastPower`| | $\mathcal O (\log(n))$ |
 |`FastPowerMod`| | $\mathcal O (\log(n))$ |
 |`StepTwo`| | $\mathcal O (\log^5(n))$* |
-|`StepFive`| | $\mathcal O (\log^{21/2}(n))$**|
+|`StepFive`| | $\mathcal O (\log^{15/2}(n))$**|
 |`EulerTotient`| | $\mathcal O (n\log(n))$ |
 |`PerfectPower`| | $\mathcal O (\log^3(n))$ |
-|`AKS`| | $\mathcal O (\log^{21/2}(n))$**|
+|`AKS`| | $\mathcal O (\log^{15/2}(n))$**|
 
+\* $\mathcal O (\log^2(n))$ if Artin's conjecture is proven true.
+
+** $\mathcal O (\log^{6}(n))$ if Artin's conjecture is proven true
 
 
 ## Citations
