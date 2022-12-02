@@ -12,6 +12,40 @@ func ModN(N uint, i int) int {
 	return m
 }
 
+// FastPower perform the without modulo by N)
+func FastPower(g int, A int) int {
+	var b int
+	a := g
+	b = 1
+	for A > 0 {
+		if A%2 == 1 {
+			b = b * a
+		}
+		a = a * a
+		A = A / 2
+	}
+	return b
+}
+
+// FastPowerMod performs the fast power algorithm modulo N
+func FastPowerMod(N uint, g int, A uint) int {
+	var b int
+	a := g
+	b = 1
+	if A < 0 {
+		A = -A
+	}
+	for A > 0 {
+		if A%2 == 1 {
+			b = ModN(N, b*a)
+		}
+		a = ModN(N, a*a)
+		A = A / 2
+	}
+	return b
+}
+
+// GCD of a, b using the Euclidean algorithm, returns (gcd, u, v) where u v are such that u*a + v*b = (gcd)
 func GCD(a, b int) (int, int, int) {
 	if b == 0 {
 		return a, 1, 0
@@ -68,6 +102,18 @@ func OrderMod(a int, r int) int {
 	}
 }
 
+// EulerTotient function finds the number of numbers less than x that are relatively prime to x
+func EulerTotient(x int) int {
+	var y int = 0
+	for i := 0; i < x; i++ {
+		gcd, _, _ := GCD(i, x)
+		if gcd == 1 {
+			y++
+		}
+	}
+	return y
+}
+
 // Polynomial struct contains data for representing a polynomial.
 // d is the degree of the polynomial
 // coefs []int is an integer list of the coefficients, so the list {c_d, c_{d-1},,...,c_0}
@@ -75,6 +121,19 @@ func OrderMod(a int, r int) int {
 type Polynomial struct {
 	d     int   //order
 	coefs []int // coefficients
+}
+
+// PolynomialEquality check whether degree and all coefficients of two polynomials are equal
+func PolynomialEquality(X, Y Polynomial) bool {
+	if X.d != Y.d {
+		return false
+	}
+	for i := 0; i < X.d+1; i++ {
+		if X.coefs[i] != Y.coefs[i] {
+			return false
+		}
+	}
+	return true
 }
 
 // PolynomialMultiply multiplies two polynomials represented by Polynomial struct
@@ -154,19 +213,6 @@ func PolynomialFastPower(X Polynomial, n int, Y Polynomial, N int) Polynomial {
 	return b
 }
 
-// PolynomialEquality check whether degree and all coefficients of two polynomials are equal
-func PolynomialEquality(X, Y Polynomial) bool {
-	if X.d != Y.d {
-		return false
-	}
-	for i := 0; i < X.d+1; i++ {
-		if X.coefs[i] != Y.coefs[i] {
-			return false
-		}
-	}
-	return true
-}
-
 // PolynomialRemainder returns the remainder after Polynomial i is divided by Polynomial N
 // using the polynomial long division algorithm
 func PolynomialRemainder(i Polynomial, N Polynomial) Polynomial {
@@ -199,92 +245,8 @@ func PolynomialRemainder(i Polynomial, N Polynomial) Polynomial {
 	return temp
 }
 
-// FastPower (without modulo by N)
-func FastPower(g int, A int) int {
-	var b int
-	a := g
-	b = 1
-	for A > 0 {
-		if A%2 == 1 {
-			b = b * a
-		}
-		a = a * a
-		A = A / 2
-	}
-	return b
-}
-
-func FastPowerMod(N uint, g int, A uint) int {
-	var b int
-	a := g
-	b = 1
-	if A < 0 {
-		A = -A
-	}
-	for A > 0 {
-		if A%2 == 1 {
-			b = ModN(N, b*a)
-		}
-		a = ModN(N, a*a)
-		A = A / 2
-	}
-	return b
-}
-
-func StepTwo(n int) int {
-	var lower = int(math.Ceil(math.Log2(float64(n)) * math.Log2(float64(n))))
-	var r = 2
-	for {
-		if OrderMod(n, r) > lower {
-			return r
-		}
-		r++
-	}
-}
-
-func StepFive(n int, r int) bool {
-	var upper int = int(math.Floor(math.Sqrt(float64(EulerTotient(r))) * math.Log2(float64(n))))
-	//fmt.Println(upper)
-	// modPolynomial is X^r - 1
-	var modPolynomialCoefs = make([]int, r+1)
-	modPolynomialCoefs[0] = 1
-	modPolynomialCoefs[r] = -1
-	var modPolynomial = Polynomial{r, modPolynomialCoefs}
-	//fmt.Println(modPolynomial)
-	for a := 1; a <= upper; a++ {
-		// left polynomial is (X+a)^n mod
-		var leftPolynomial = PolynomialFastPower(Polynomial{1, []int{1, a}}, n, modPolynomial, n)
-		//fmt.Println(leftPolynomial)
-		// right polynomial is X^n + a
-		var rightPolynomial = PolynomialFastPower(Polynomial{1, []int{1, 0}}, n, modPolynomial, n)
-		rightPolynomial = PolynomialAdd(rightPolynomial, Polynomial{0, []int{a}})
-		//fmt.Println(rightPolynomial)
-		//fmt.Println(a)
-		//fmt.Println("")
-		//for _, c := range leftPolynomial.coefs {
-		//	fmt.Println(c)
-		//}
-		if !PolynomialEquality(leftPolynomial, rightPolynomial) {
-			return false
-		}
-	}
-	return true
-}
-
-// EulerTotient function finds the number of numbers less than x that are relatively prime to x
-func EulerTotient(x int) int {
-	var y int = 0
-	for i := 0; i < x; i++ {
-		gcd, _, _ := GCD(i, x)
-		if gcd == 1 {
-			y++
-		}
-	}
-	return y
-}
-
 // PerfectPower determines whether n can be represented as a perfect power a^b
-// timing is O(log^3(n))
+// used in step 1 of the AKS algorithm
 func PerfectPower(n int) bool {
 	var bMax = int(math.Log2(float64(n))) + 1
 	for b := 2; b <= bMax; b++ {
@@ -311,6 +273,39 @@ func PerfectPower(n int) bool {
 	return false
 }
 
+// StepTwo of the AKS algorithm
+func StepTwo(n int) int {
+	var lower = int(math.Ceil(math.Log2(float64(n)) * math.Log2(float64(n))))
+	var r = 2
+	for {
+		if OrderMod(n, r) > lower {
+			return r
+		}
+		r++
+	}
+}
+
+// StepFive of the AKS algorithm
+func StepFive(n int, r int) bool {
+	var upper int = int(math.Floor(math.Sqrt(float64(EulerTotient(r))) * math.Log2(float64(n))))
+	// modPolynomial is X^r - 1
+	var modPolynomialCoefs = make([]int, r+1)
+	modPolynomialCoefs[0] = 1
+	modPolynomialCoefs[r] = -1
+	var modPolynomial = Polynomial{r, modPolynomialCoefs}
+	for a := 1; a <= upper; a++ {
+		// left polynomial is (X+a)^n mod
+		var leftPolynomial = PolynomialFastPower(Polynomial{1, []int{1, a}}, n, modPolynomial, n)
+		// right polynomial is X^n + a
+		var rightPolynomial = PolynomialFastPower(Polynomial{1, []int{1, 0}}, n, modPolynomial, n)
+		rightPolynomial = PolynomialAdd(rightPolynomial, Polynomial{0, []int{a}})
+		if !PolynomialEquality(leftPolynomial, rightPolynomial) {
+			return false
+		}
+	}
+	return true
+}
+
 // AKS algorithm false = composite, true = prime
 func AKS(n int) bool {
 	// step 1 -- find if n is a perfect power
@@ -333,63 +328,3 @@ func AKS(n int) bool {
 	// step 5 -- for loop
 	return StepFive(n, r)
 }
-
-//func main() {
-//var n = 49
-//var test = PerfectPower(n)
-//if test {
-//	fmt.Println(strconv.Itoa(n) + " is a perfect power")
-//} else {
-//	fmt.Println(strconv.Itoa(n) + " is not a perfect power")
-//}
-//for n := 2; n <= 10000; n++ {
-//	var test = PerfectPower(n)
-//	if test {
-//		fmt.Println(strconv.Itoa(n) + " is a perfect power")
-//	}
-//}
-//fmt.Println(OrderMod(2739, 674893))
-//fmt.Println(StepTwo(29))
-//fmt.Println(EulerTotient(15))
-//// test polynomial multiplication
-//x := Polynomial{1, []int{1, 2}}
-//y := Polynomial{2, []int{1, 2, 3}}
-//z := PolynomialMultiply(x, y)
-//for _, i := range z.coefs {
-//	fmt.Println(i)
-//}
-//ac := []int{1, 0, 2, 0, 0}
-//bc := []int{1, 0, -1}
-//a := Polynomial{4, ac}
-//b := Polynomial{2, bc}
-////fmt.Println(PolynomialRemainder(a,b))
-//fmt.Println(PolynomialMod(a, b, 3))
-
-// test first 10,000 numbers, print if its prime
-//for i := 2; i <= 10000; i++ {
-//	if AKS(i) {
-//		fmt.Println(strconv.Itoa(i) + " is prime.")
-//	}
-//}
-//N := Polynomial{2, []int{1, 0, 1}}
-//i := Polynomial{5, []int{1, 5, 5, 6, 7, 9}}
-//z := PolynomialRemainder(i, N)
-//fmt.Println(z.d)
-//for _, c := range z.coefs {
-//	fmt.Println(c)
-//}
-//i := 31
-//if AKS(i) {
-//	fmt.Println(strconv.Itoa(i) + " is prime.")
-//} else {
-//	fmt.Println(strconv.Itoa(i) + " is not prime.")
-//}
-//
-//i := Polynomial{2, []int{1, 0, 1}}
-//N := Polynomial{5, []int{1, 5, 5, 6, 7, 9}}
-//
-//z := PolynomialFastPower(N, 2, i, 1000)
-//for _, c := range z.coefs {
-//	fmt.Println(c)
-//}
-//}
