@@ -128,22 +128,6 @@ func PolynomialEquality(X, Y Polynomial) bool {
 	return true
 }
 
-// PolynomialMultiply multiplies two polynomials represented by Polynomial struct
-func PolynomialMultiply(X, Y Polynomial) Polynomial {
-	dx := X.d
-	dy := Y.d
-	coefs := make([]int, dx+dy+1)
-	for i := 0; i < len(coefs); i++ {
-		coefs[i] = 0
-	}
-	for i, c1 := range X.coefs {
-		for j, c2 := range Y.coefs {
-			coefs[i+j] += c1 * c2
-		}
-	}
-	return Polynomial{len(coefs) - 1, coefs}
-}
-
 // PolynomialAdd adds two polynomials represented by the Polynomial struct
 func PolynomialAdd(X, Y Polynomial) Polynomial {
 	// take the upper limit as the min degree between X and Y
@@ -169,6 +153,22 @@ func PolynomialAdd(X, Y Polynomial) Polynomial {
 		j++
 	}
 	coefs = coefs[j:]
+	return Polynomial{len(coefs) - 1, coefs}
+}
+
+// PolynomialMultiply multiplies two polynomials represented by Polynomial struct
+func PolynomialMultiply(X, Y Polynomial) Polynomial {
+	dx := X.d
+	dy := Y.d
+	coefs := make([]int, dx+dy+1)
+	for i := 0; i < len(coefs); i++ {
+		coefs[i] = 0
+	}
+	for i, c1 := range X.coefs {
+		for j, c2 := range Y.coefs {
+			coefs[i+j] += c1 * c2
+		}
+	}
 	return Polynomial{len(coefs) - 1, coefs}
 }
 
