@@ -1,11 +1,8 @@
 # AKS primality test
 The [AKS primality test](https://www.cse.iitk.ac.in/users/manindra/algebra/primality_v6.pdf) (discovered by Agrawal, Kayal, and Saxena) is the first discovered polynomial-time algorithm for testing primality of a given number.
 
-## Current progress
-A draft code has been written which goes through all five steps, but it has not been checked/debugged.
-
 ## Testing the code
-main.go runs a program which checks primality of the first 10,000 natural numbers. To check whether the AKS algorithm produces the correct answer, primality is also tested with the Miller-Rabin test. The Miller-Rabin test is assured to produce the correct answer so long as the Riemann Hypothesis is true. 
+`main` in AKS.go runs checks primality of the first 10,000 natural numbers. To check whether the AKS algorithm produces the correct answer, primality is also tested with the Miller-Rabin test. The Miller-Rabin test is assured to produce the correct answer so long as the Riemann Hypothesis is true. 
 
 ## How it works
 
@@ -25,22 +22,22 @@ Input: integer n > 1.
 Computational complexity of Polynomial functions is given in terms of the order of the polynomial, while other functions are given in the size of the integer input. All exponential functions are called by `AKS` with $\log$-bounded inputs, producing in total a polynomial-time algorithm.
 |Function|Description|Timing|
 |--------|-----------|------|
-|`ModN`| | $\mathcal O (1)$ |
-|`GCD`| | $\mathcal O (\log(n))$ |
-|`OrderMod`| | $\mathcal O (n\log(n))$ |
-|`PolynomialMultiply`| | $\mathcal O (n^2)$ |
-|`PolynomialAdd`| | $\mathcal O (n)$|
-|`PolynomialMod`| | $\mathcal O (n^2)$ |
-|`PolynomialFastPower`| | $\mathcal O (n^3)$ |
-|`PolynomialEquality`| | $\mathcal O (n)$ |
-|`PolynomialRemainder`| | $\mathcal O (n^2)$ |
-|`FastPower`| | $\mathcal O (\log(n))$ |
-|`FastPowerMod`| | $\mathcal O (\log(n))$ |
-|`StepTwo`| | $\mathcal O (\log^5(n))$* |
-|`StepFive`| | $\mathcal O (\log^{15/2}(n))$**|
-|`EulerTotient`| | $\mathcal O (n\log(n))$ |
-|`PerfectPower`| | $\mathcal O (\log^3(n))$ |
-|`AKS`| | $\mathcal O (\log^{15/2}(n))$**|
+|`ModN`| $m$ such that $0 \leq m < N$ and $i = m \mod N$ | $\mathcal O (1)$ |
+|`FastPower`| fast powering algorithm | $\mathcal O (\log(n))$ |
+|`FastPowerMod`| fast powering algorithm with modulus | $\mathcal O (\log(n))$ |
+|`GCD`| greatest common divisor of two numbers | $\mathcal O (\log(n))$ |
+|`OrderMod`| the order of a modulo r | $\mathcal O (n\log(n))$ |
+|`EulerTotient`| number of numbers less than x relatively prime to x | $\mathcal O (n\log(n))$ |
+|`PolynomialEquality`| check equality between polynomials | $\mathcal O (n)$ |
+|`PolynomialAdd`| addition on polynomial objects | $\mathcal O (n)$|
+|`PolynomialMultiply`| multiplication on polynomial objects | $\mathcal O (n^2)$ |
+|`PolynomialMod`| $X \mod Y, N$ for $X$, $Y$ polynomial and $N$ integer | $\mathcal O (n^2)$ |
+|`PolynomialFastPower`| fast powering algorithm on polynomial objects | $\mathcal O (n^3)$ |
+|`PolynomialRemainder`| remainder after dividing two polynomials | $\mathcal O (n^2)$ |
+|`StepTwo`| Step 2 of the AKS algorithm | $\mathcal O (\log^5(n))$* |
+|`StepFive`| Step 5 of the AKS algorithm | $\mathcal O (\log^{15/2}(n))$**|
+|`PerfectPower`| tests if $n$ is of the form $a^b$ | $\mathcal O (\log^3(n))$ |
+|`AKS`| AKS primality test | $\mathcal O (\log^{15/2}(n))$**|
 
 \* $\mathcal O (\log^2(n))$ if Artin's conjecture is proven true.
 
@@ -48,6 +45,7 @@ Computational complexity of Polynomial functions is given in terms of the order 
 
 
 ## Citations
+[PRIMES is in P. <em> Agrawal, Kayal, and Saxena. </em>  Annals of Mathematics, pg. 781-793. Volume 160, Issue 2.](https://www.cse.iitk.ac.in/users/manindra/algebra/primality_v6.pdf)
 
 ## License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
