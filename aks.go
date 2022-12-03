@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// ModN reduces i to m such that 0 <= m < N and m = i (mod N)
 func ModN(N uint, i int) int {
 	m := i % int(N)
 	if m < 0 {
@@ -15,7 +16,7 @@ func ModN(N uint, i int) int {
 	return m
 }
 
-// FastPower perform the without modulo by N)
+// FastPower perform the without modulo by N. returns g^A
 func FastPower(g int, A int) int {
 	var b int
 	a := g
@@ -30,7 +31,7 @@ func FastPower(g int, A int) int {
 	return b
 }
 
-// FastPowerMod performs the fast power algorithm modulo N
+// FastPowerMod performs the fast power algorithm modulo N. returns b = g^A (mod N)
 func FastPowerMod(N uint, g int, A uint) int {
 	var b int
 	a := g
@@ -48,21 +49,18 @@ func FastPowerMod(N uint, g int, A uint) int {
 	return b
 }
 
-// GCD of a, b using the Euclidean algorithm, returns (gcd, u, v) where u v are such that u*a + v*b = (gcd)
-func GCD(a, b int) (int, int, int) {
+// GCD of a, b using the Euclidean algorithm
+func GCD(a, b int) int {
 	if b == 0 {
-		return a, 1, 0
+		return a
 	}
-	var na, nb bool
 	if a < 0 {
-		na = true
 		a *= -1
 	}
 	if b < 0 {
-		nb = true
 		b *= -1
 	}
-	var g, u, v int
+	var g, u int
 	u = 1
 	g = a
 	x := 0
@@ -76,23 +74,14 @@ func GCD(a, b int) (int, int, int) {
 		x = s
 		y = t
 	}
-	v = (g - a*u) / b
 
-	if !na && !nb {
-		return g, u, v
-	} else if !na && nb {
-		return g, u, -v
-	} else if na && !nb {
-		return g, -u, v
-	} else {
-		return g, -u, -v
-	}
+	return g
 }
 
 // OrderMod returns the order of a modulo r. The order only exists when gcd(a, r) = 1, so if that is not true,
 // the function returns 0
 func OrderMod(a int, r int) int {
-	gcd, _, _ := GCD(a, r)
+	gcd := GCD(a, r)
 	if gcd != 1 {
 		return 0
 	}
@@ -109,7 +98,7 @@ func OrderMod(a int, r int) int {
 func EulerTotient(x int) int {
 	var y int = 0
 	for i := 0; i < x; i++ {
-		gcd, _, _ := GCD(i, x)
+		gcd := GCD(i, x)
 		if gcd == 1 {
 			y++
 		}
@@ -120,7 +109,7 @@ func EulerTotient(x int) int {
 // Polynomial struct contains data for representing a polynomial.
 // d is the degree of the polynomial
 // coefs []int is an integer list of the coefficients, so the list {c_d, c_{d-1},,...,c_0}
-// from the polynomial c_0*x^0 + c_1*x^1 + c_2*x^2 + ... + c_d*x^d
+// from the polynomial c_d*x^d + c_{d-1}*x^{d-1} + ... + c_2*x^2 + c_1*x^1 + c_0*x^0
 type Polynomial struct {
 	d     int   //order
 	coefs []int // coefficients
@@ -155,7 +144,7 @@ func PolynomialMultiply(X, Y Polynomial) Polynomial {
 	return Polynomial{len(coefs) - 1, coefs}
 }
 
-// PolynomialAdd does polynomial addition between the two given polynomials
+// PolynomialAdd adds two polynomials represented by the Polynomial struct
 func PolynomialAdd(X, Y Polynomial) Polynomial {
 	// take the upper limit as the min degree between X and Y
 	var poly1 Polynomial
@@ -201,7 +190,8 @@ func PolynomialMod(X, Y Polynomial, N int) Polynomial {
 	return Polynomial{len(coefs) - 1, coefs}
 }
 
-// PolynomialFastPower X^n mod(Y, N) with X, Y polynomials and n, N integers
+// PolynomialFastPower X^n mod(Y, N) with X, Y polynomials and n, N integers. The implementation is the same
+// as FastPowerMod but using Polynomial functions
 func PolynomialFastPower(X Polynomial, n int, Y Polynomial, N int) Polynomial {
 	var b Polynomial
 	A := X
@@ -216,7 +206,7 @@ func PolynomialFastPower(X Polynomial, n int, Y Polynomial, N int) Polynomial {
 	return b
 }
 
-// PolynomialRemainder returns the remainder after Polynomial i is divided by Polynomial N
+// PolynomialRemainder returns the remainder after Polynomial i is divided by Polynomial N,
 // using the polynomial long division algorithm
 func PolynomialRemainder(i Polynomial, N Polynomial) Polynomial {
 	orderi := i.d
@@ -249,7 +239,8 @@ func PolynomialRemainder(i Polynomial, N Polynomial) Polynomial {
 }
 
 // PerfectPower determines whether n can be represented as a perfect power a^b
-// used in step 1 of the AKS algorithm
+// used in step 1 of the AKS algorithm. We do this by iterating through all possible
+// powers b, then using a binary search to find if there is a possible a such that a^b = n.
 func PerfectPower(n int) bool {
 	var bMax = int(math.Log2(float64(n))) + 1
 	for b := 2; b <= bMax; b++ {
@@ -276,7 +267,7 @@ func PerfectPower(n int) bool {
 	return false
 }
 
-// StepTwo of the AKS algorithm
+// StepTwo of the AKS algorithm. Find the smallest r such that o_r(n) > log^2(n).
 func StepTwo(n int) int {
 	var lower = int(math.Ceil(math.Log2(float64(n)) * math.Log2(float64(n))))
 	var r = 2
@@ -288,7 +279,7 @@ func StepTwo(n int) int {
 	}
 }
 
-// StepFive of the AKS algorithm
+// StepFive of the AKS algorithm. 
 func StepFive(n int, r int) bool {
 	var upper int = int(math.Floor(math.Sqrt(float64(EulerTotient(r))) * math.Log2(float64(n))))
 	// modPolynomial is X^r - 1
@@ -309,7 +300,7 @@ func StepFive(n int, r int) bool {
 	return true
 }
 
-// AKS algorithm false = composite, true = prime
+// AKS algorithm. false = composite, true = prime
 func AKS(n int) bool {
 	// step 1 -- find if n is a perfect power
 	if PerfectPower(n) {
@@ -319,7 +310,7 @@ func AKS(n int) bool {
 	var r = StepTwo(n)
 	// step 3 -- check GCD between 1 and r
 	for i := 2; i <= r; i++ {
-		gcd, _, _ := GCD(n, i)
+		gcd := GCD(n, i)
 		if 1 < gcd && gcd < n {
 			return false
 		}
@@ -330,56 +321,6 @@ func AKS(n int) bool {
 	}
 	// step 5 -- for loop
 	return StepFive(n, r)
-}
-
-type EuclidData struct {
-	GCD int
-	U   int
-	V   int
-}
-
-// Euclidean algorithm
-func EuclidAlgo(a, b int) EuclidData {
-	// if b = 0, then the gcd is a
-	if b == 0 {
-		return EuclidData{a, 1, 0}
-	}
-	// Keeps tracks of the sign of a and b and makes sure
-	// a and b are non-negative
-	var na, nb bool
-	if a < 0 {
-		na = true
-		a *= -1
-	}
-	if b < 0 {
-		nb = true
-		b *= -1
-	}
-	// Variables we will return
-	var g, u, v int
-	u = 1
-	g = a
-	x := 0 // keeps track of the number a's used in the Euclidean algorithm
-	y := b // keeps track of the denominator in the Euclidean algorithm
-	for y != 0 {
-		t := ModN(uint(y), g) // find t,q with g = qy + t
-		q := g / y
-		s := u - q*x
-		u = x
-		g = y
-		x = s
-		y = t
-	}
-	v = (g - a*u) / b
-	if !na && !nb {
-		return EuclidData{g, u, v}
-	} else if !na && nb {
-		return EuclidData{g, u, -v}
-	} else if na && !nb {
-		return EuclidData{g, -u, v}
-	} else {
-		return EuclidData{g, -u, -v}
-	}
 }
 
 // MillerRabinTest tests a sufficient amount of witnesses such that N may be determined to be composite or prime
@@ -408,7 +349,7 @@ func MillerRabinWitness(N, a int) bool {
 	// 1. If n is even or 1 < gcd(a,n) < n, return Composite
 	if N%2 == 0 {
 		return true
-	} else if EuclidAlgo(N, a).GCD != 1 {
+	} else if GCD(N, a) != 1 {
 		return true
 	}
 	q := N - 1
