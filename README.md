@@ -14,7 +14,7 @@ Input: integer n > 1.
 4. If $n \leq r$ output `PRIME`.
 5. For $a = 1$ to $\lfloor \sqrt{\phi(r)}\log n\rfloor$ do
     
-    if ( $(X+a)^n \neq X^n+a \quad (\operatorname{mod} X^r-1, n)$ ), output `COMPOSITE`.
+    if ( $(X+a)^n \neq X^n+a \quad (\mathrm{mod} X^r-1, n)$ ), output `COMPOSITE`.
 6. Output `PRIME`.
 
 ## Functions and timing analysis
